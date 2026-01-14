@@ -11,6 +11,10 @@
   height: 100vh;
   box-sizing: border-box;
   will-change: transform;
+  position: relative;
+  z-index: 150;
+  background-color: var(--backgroundColor) !important;
+  margin-top: 200px;
 }
 .work-container {
   margin: auto;
@@ -140,7 +144,7 @@
   .work-section h2 {
     font-size: 60px;
     margin-bottom: 30px;
-    margin-top: 70px;
+    margin-top: 200px;
   }
 }
 @media only screen and (max-width: 1400px) {

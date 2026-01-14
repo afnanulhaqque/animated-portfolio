@@ -8,42 +8,50 @@ gsap.registerPlugin(useGSAP);
 
 const Work = () => {
   useGSAP(() => {
-    const setTranslateX = () => {
-      const boxes = document.querySelectorAll(".work-box");
-      if (boxes.length === 0) return 0;
-      
-      const container = document.querySelector(".work-container");
-      if (!container) return 0;
+    let timeline: globalThis.GSAPTimeline | null = null;
 
-      const rectLeft = container.getBoundingClientRect().left;
-      const boxWidth = boxes[0].getBoundingClientRect().width;
-      const parentWidth = boxes[0].parentElement!.getBoundingClientRect().width;
-      const style = window.getComputedStyle(boxes[0]);
-      const padding = parseInt(style.padding) / 2;
+    const setupScroll = () => {
+      const container = document.querySelector(".work-container");
+      const flexContainer = document.querySelector(".work-flex");
+      if (!container || !flexContainer) return;
+
+      const totalWidth = flexContainer.scrollWidth;
+      const visibleWidth = container.clientWidth;
+      const scrollDistance = totalWidth - visibleWidth; 
+
+      if (timeline) {
+        timeline.kill();
+        ScrollTrigger.getById("work")?.kill();
+      }
       
-      return (boxWidth * boxes.length) - (rectLeft + parentWidth) + padding;
+      // Force refresh to ensure dimensions are correct
+      ScrollTrigger.refresh();
+
+      timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".work-section",
+          start: "top top",
+          end: () => `+=${scrollDistance + 200}`, // Add buffer
+          scrub: 1, // Smooth scrub
+          pin: true,
+          pinSpacing: true,
+          id: "work",
+          invalidateOnRefresh: true,
+        },
+      });
+
+      timeline.to(".work-flex", {
+        x: -scrollDistance,
+        ease: "none",
+      });
     };
 
-    let timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: ".work-section",
-        start: "top top",
-        end: () => `+=${setTranslateX()}`, 
-        scrub: true,
-        pin: true,
-        pinSpacing: true, // Explicitly ensure space is reserved
-        id: "work",
-        invalidateOnRefresh: true,
-      },
-    });
-
-    timeline.to(".work-flex", {
-      x: () => -setTranslateX(),
-      ease: "none",
-    });
+    // Initial setup with a small delay to allow loading
+    const timer = setTimeout(setupScroll, 100);
 
     return () => {
-      timeline.kill();
+      clearTimeout(timer);
+      if (timeline) timeline.kill();
       ScrollTrigger.getById("work")?.kill();
     };
   }, []);

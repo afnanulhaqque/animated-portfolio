@@ -12,7 +12,7 @@
   box-sizing: border-box;
   will-change: transform;
   position: relative;
-  z-index: 150;
+  z-index: 600;
   background-color: var(--backgroundColor) !important;
   margin-top: 200px;
 }

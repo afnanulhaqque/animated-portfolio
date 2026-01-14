@@ -3,9 +3,10 @@
   max-width: var(--cMaxWidth);
   width: var(--cWidth);
   bottom: 0;
-  z-index: 99;
+  z-index: 500;
   left: 50%;
   transform: translateX(-50%);
+  pointer-events: none;
 }
 .social-icons {
   position: absolute;
@@ -16,6 +17,7 @@
   gap: 8px;
   z-index: 999;
   padding: 10px;
+  pointer-events: all;
 }
 .social-icons:hover {
   transition: 0.3s;
@@ -45,7 +47,7 @@
 }
 .resume-button {
   position: absolute;
-  z-index: 99;
+  z-index: 999;
   display: flex;
   gap: 5px;
   bottom: 40px;
@@ -61,6 +63,7 @@
   transition: 0.5s;
   transform-origin: left bottom;
   transform: translateX(100%) rotateZ(-90deg);
+  pointer-events: all;
 }
 .resume-button:hover {
   color: #fff;
